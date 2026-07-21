@@ -1,0 +1,18 @@
+{
+  "name": "YARO the Spire",
+  "short_name": "YARO the Spire",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#231F20",
+  "theme_color": "#000",
+  "description": "",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "TemplateData/icons/yaro-the-spire-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

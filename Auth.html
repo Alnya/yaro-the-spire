@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>YARO the Spire</title>
+  <link rel="shortcut icon" href="TemplateData/favicon.ico">
+  <link rel="stylesheet" href="TemplateData/style.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.0/gsap.min.js"></script>
+</head>
+
+<body>
+  <div class="dummy-page">
+    <div class="dentaku">
+      <h1 id="num" class="num">0</h1>
+      <table class="tb">
+        <tr>
+          <td>
+            <button id="7" class="btn w-25" onclick="add_number(7)">7</button>
+            <button id="8" class="btn w-25" onclick="add_number(8)">8</button>
+            <button id="9" class="btn w-25" onclick="add_number(9)">9</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button id="4" class="btn w-25" onclick="add_number(4)">4</button>
+            <button id="5" class="btn w-25" onclick="add_number(5)">5</button>
+            <button id="6" class="btn w-25" onclick="add_number(6)">6</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button id="1" class="btn w-25" onclick="add_number(1)">1</button>
+            <button id="2" class="btn w-25" onclick="add_number(2)">2</button>
+            <button id="3" class="btn w-25" onclick="add_number(3)">3</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button id="0" class="btn w-25" onclick="add_number(0)">0</button>
+            <button id="ac" class="btn w-25" onclick="ac()">AC</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="real-page" style="display: none;">
+    <div class="mosstory">
+      <h1 class="mosstory">YARO13</h1>
+      <br><br>
+      <h2>
+      </h2>
+      <br>
+      <a href="/yaro-the-spire/">
+        <button class="btn btn-lg btn-success">Play</button>
+      </a>
+    </div>
+  </div>
+
+
+  <script>
+    function add_number(n) {
+      const num = document.getElementById("num");
+      const strLen = num.textContent.length;
+      if (10 <= strLen) {
+        disable_all();
+        return null;
+      }
+      const number = parseInt(num.textContent);
+      if (number === 0 && n !== 0) {
+        num.innerHTML = n;
+      } else {
+        num.innerHTML = num.textContent + n;
+      }
+      if (strLen === 9) {
+        disable_all();
+      }
+    }
+
+    function ac() {
+      const num = document.getElementById("num");
+      if (num.innerHTML === "86") {
+        signIn(1);
+      } else {
+        //const str = num.innerHTML;
+        //if (str.length > 3) {
+        //    if (str[0] === "1" && str[1] === "4" && str[str.length - 1] === "1") {
+        //        sessionStorage.setItem("nature", "../images/nature.png");
+        //        signIn(1);
+        //        return;
+        //    }
+        //}
+        num.innerHTML = "0";
+        enable_all();
+      }
+    }
+
+    function disable_all() {
+      for (let i = 0; i <= 9; i++) {
+        const num = document.getElementById(String(i));
+        num.disabled = true;
+      }
+    }
+
+    function enable_all() {
+      for (let i = 0; i <= 9; i++) {
+        const num = document.getElementById(String(i));
+        num.disabled = false;
+      }
+    }
+
+    function signIn(colorCode) {
+      localStorage.setItem("auth", "ok");
+      fadeOut(1000);
+      changeColor(3000, colorCode);
+      disable_all();
+      const acButton = document.getElementById("ac");
+      acButton.disabled = true;
+      setTimeout(function () {
+        const dummyPage = document.querySelector('.dummy-page');
+        const realPage = document.querySelector('.real-page');
+
+        gsap.to(dummyPage, {
+          x: "-100%", // ダミーページを左からスライドアウト
+          duration: 1,
+          onComplete: () => {
+            dummyPage.style.display = 'none'; // ダミーページを非表示にする
+            realPage.style.display = 'block';
+            gsap.from(realPage, {
+              x: "100%", // 本物のページを右からスライドイン
+              duration: 1,
+            });
+          }
+        });
+      }, 2500);
+      return;
+    }
+
+    function fadeOut(duration) {
+      for (let i = 0; i <= 9; i++) {
+        let element = document.getElementById(i);
+        let opacity = 1;
+        const interval = 10; // ミリ秒単位でのインターバル
+        const steps = duration / interval;
+        const decrement = 1 / steps;
+
+        const fadeInterval = setInterval(() => {
+          opacity -= decrement;
+          element.style.opacity = opacity;
+
+          if (opacity <= 0) {
+            clearInterval(fadeInterval);
+            element.style.display = 'none'; // フェードアウト後、ボタンを非表示にする
+          }
+        }, interval);
+      }
+      let element = document.getElementById("ac");
+      let opacity = 1;
+      const interval = 10; // ミリ秒単位でのインターバル
+      const steps = duration / interval;
+      const decrement = 1 / steps;
+
+      const fadeInterval = setInterval(() => {
+        opacity -= decrement;
+        element.style.opacity = opacity;
+
+        if (opacity <= 0) {
+          clearInterval(fadeInterval);
+          element.style.display = 'none'; // フェードアウト後、ボタンを非表示にする
+        }
+      }, interval);
+    }
+
+    function changeColor(duration, colorNum) {
+      let element = document.getElementById("num");
+      let opacity = 1;
+      const interval = 10; // ミリ秒単位でのインターバル
+      const steps = duration / interval;
+      const decrement = 1 / steps;
+
+      const fadeInterval = setInterval(() => {
+        opacity -= decrement;
+        if (colorNum === 0) {
+          element.style.color = `rgb(${Math.floor(256 - (opacity * 256))},${Math.floor(256 - (opacity * 256))},0)`;
+        } else if (colorNum === 1) {
+          element.style.color = `rgb(${Math.floor(256 - (opacity * 256))},0,0)`;
+        }
+        if (opacity <= 0) {
+          clearInterval(fadeInterval);
+          // element.style.display = 'none'; // フェードアウト後、ボタンを非表示にする
+        }
+      }, interval);
+    }
+  </script>
+</body>
+<style>
+  html {
+    touch-action: manipulation;
+  }
+
+  body {
+    background-color: black;
+    color: white;
+  }
+
+  table.tb {
+    margin: auto;
+    width: 100%;
+  }
+
+  h1.num {
+    text-align: right;
+    padding-right: 25%;
+    margin: auto;
+    font-size: 100px;
+  }
+
+  div.dentaku {
+    padding-top: 50px;
+    padding-left: 16%;
+    font-family: Century;
+  }
+
+  p.prime {
+    font-size: 500%;
+  }
+
+  button.w-25 {
+    font-size: 35px;
+    background-color: deeppink;
+  }
+
+  button.w-25:link {
+    background-color: gold;
+  }
+
+  button.w-25:visited {
+    background-color: gold;
+  }
+
+  button.w-25:hover {
+    background-color: gold;
+  }
+
+  button.w-25:active {
+    background-color: gold;
+  }
+
+  button.w-25:checked {
+    background-color: gold;
+  }
+
+  div.img86 {
+    visibility: hidden;
+    align-items: center;
+    position: absolute;
+    top: 200px;
+    left: 10%;
+    width: 100px;
+    height: auto;
+  }
+
+  img.img86 {
+    visibility: hidden;
+    align-items: center;
+    position: absolute;
+    top: 0px;
+    left: 25%;
+    width: 180px;
+    height: auto;
+  }
+
+  div.mosstory {
+    padding-top: 40px;
+    font-family: 'Times New Roman', Times, serif;
+  }
+
+  h1.mosstory {
+    font-size: 100px;
+  }
+
+  html {
+    font-size: 14px;
+  }
+
+  @media (min-width: 768px) {
+    html {
+      font-size: 16px;
+    }
+  }
+
+  .btn:focus,
+  .btn:active:focus,
+  .btn-link.nav-link:focus,
+  .form-control:focus,
+  .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  }
+
+  html {
+    position: relative;
+    min-height: 100%;
+  }
+
+  body {
+    margin-bottom: 60px;
+  }
+</style>
+
+</html>
