@@ -24,9 +24,22 @@
 
 
   <script>
-    window.addEventListener("load", function () {
+    window.addEventListener("load", async () => {
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("ServiceWorker.js");
+        try {
+          const reg = await navigator.serviceWorker.register("./ServiceWorker.js");
+          console.log("Service Worker登録成功", reg);
+        } catch (e) {
+          console.error("Service Worker登録失敗", e);
+        }
+      }
+
+      let auth = localStorage.getItem("auth");
+      if (!auth) {
+        if (!location.pathname.endsWith("/Auth")) {
+          location.replace("/yaro-the-spire/Auth");
+          return;
+        }
       }
     });
 
@@ -123,20 +136,20 @@
     };
     document.body.appendChild(script);
 
-    window.onload = function () {
-      let auth = localStorage.getItem("auth");
-      if (auth == null || auth == "") {
-        // let layout = document.getElementById("layout");
-        // layout.style.display = "none";
-        // sessionStorage.setItem("auth", "ok");
-        let currentUrl = location.href;
-        if (!currentUrl.endsWith("/Auth")) {
-          location.replace("/yaro-the-spire/Auth");
-        }
-        return;
-      }
-      //nature();
-    }
+    // window.onload = function () {
+    //   let auth = localStorage.getItem("auth");
+    //   if (auth == null || auth == "") {
+    //     // let layout = document.getElementById("layout");
+    //     // layout.style.display = "none";
+    //     // sessionStorage.setItem("auth", "ok");
+    //     let currentUrl = location.href;
+    //     if (!currentUrl.endsWith("/Auth")) {
+    //       location.replace("/yaro-the-spire/Auth");
+    //     }
+    //     return;
+    //   }
+    //   //nature();
+    // }
   </script>
 </body>
 

@@ -1,4 +1,4 @@
-const cacheName = "yaro-the-spire-0.0.1";
+const cacheName = "yaro-the-spire-0.0.2";
 const contentToCache = [
   "Build/YTSBuild0722.loader.js",
   "Build/YTSBuild0722.framework.js.unityweb",
