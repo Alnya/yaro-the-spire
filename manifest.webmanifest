@@ -2,7 +2,7 @@
   "name": "YARO the Spire",
   "short_name": "YARO the Spire",
   "start_url": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#231F20",
   "theme_color": "#000",
   "description": "",
