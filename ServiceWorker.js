@@ -1,9 +1,9 @@
 const cacheName = "yaro-the-spire-0.0.1";
 const contentToCache = [
   "Build/YTSBuild0722.loader.js",
-  "Build/YTSBuild0722.framework.js.br",
-  "Build/YTSBuild0722.data.br",
-  "Build/YTSBuild0722.wasm.br",
+  "Build/YTSBuild0722.framework.js.unityweb",
+  "Build/YTSBuild0722.data.unityweb",
+  "Build/YTSBuild0722.wasm.unityweb",
   "TemplateData/style.css"
 
 ];
