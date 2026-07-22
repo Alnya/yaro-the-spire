@@ -60,11 +60,11 @@
   </div>
 
   <!-- PWAインストール促進バナー -->
-  <div id="pwa-install-banner" style="display:none;">
-    <div class="pwa-install-content">
-      <p class="pwa-install-text">オフライン版をインストール！</p>
-      <p class="pwa-install-instruction" id="pwa-install-instruction"></p>
-      <button id="pwa-install-close" class="pwa-install-close">閉じる</button>
+  <div id="pwa-install-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:10000; justify-content:center; align-items:center; padding:20px; background:rgba(0,0,0,0.92); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);">
+    <div style="text-align:center; width:100%; max-width:500px; margin:0 auto;">
+      <p style="color:white; font-size:22px; font-weight:bold; margin:0 0 8px 0; font-family:-apple-system,BlinkMacSystemFont,sans-serif;">オフライン版をインストール！</p>
+      <p id="pwa-install-instruction" style="color:#ccc; font-size:18px; margin:0 0 14px 0; font-family:-apple-system,BlinkMacSystemFont,sans-serif;"></p>
+      <button id="pwa-install-close" style="background:#4CAF50; color:white; border:none; border-radius:8px; padding:12px 36px; font-size:16px; font-weight:bold; cursor:pointer; font-family:-apple-system,BlinkMacSystemFont,sans-serif;">閉じる</button>
     </div>
   </div>
 
