@@ -98,10 +98,11 @@
     if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
       // Mobile device style: fill the whole browser client area with the game canvas:
       container.className = "unity-mobile";
-      // 初回のcanvasサイズ設定（Unity起動前に適切なサイズを与える）
-      canvas.style.width = window.innerWidth + "px";
-      canvas.style.height = window.innerHeight + "px";
     }
+
+    // 初回のcanvasサイズ設定（Unity起動前に適切なサイズを与える）
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
 
     loadingBar.style.display = "block";
 
