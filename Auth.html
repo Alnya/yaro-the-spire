@@ -59,6 +59,15 @@
     </div>
   </div>
 
+  <!-- PWAインストール促進バナー -->
+  <div id="pwa-install-banner" style="display:none;">
+    <div class="pwa-install-content">
+      <p class="pwa-install-text">ホーム画面に追加してプレイしよう！</p>
+      <p class="pwa-install-instruction" id="pwa-install-instruction"></p>
+      <button id="pwa-install-close" class="pwa-install-close">閉じる</button>
+    </div>
+  </div>
+
 
   <script>
     function add_number(n) {
@@ -194,6 +203,37 @@
       }, interval);
     }
   </script>
+  <script>
+    // PWAインストール促進バナー
+    (function () {
+      var isStandalone = window.matchMedia('(display-mode: standalone)').matches
+        || window.matchMedia('(display-mode: fullscreen)').matches
+        || window.navigator.standalone === true;
+
+      var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      if (isMobile && !isStandalone) {
+        var banner = document.getElementById('pwa-install-banner');
+        var instruction = document.getElementById('pwa-install-instruction');
+
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+          instruction.innerHTML = '共有ボタン <span style="font-size:1.4em;">&#x1F4E4;</span> →「ホーム画面に追加」をタップ';
+        } else {
+          instruction.innerHTML = 'メニュー <span style="font-size:1.4em;">&#x22EE;</span> →「ホーム画面に追加」をタップ';
+        }
+
+        var dismissed = localStorage.getItem('pwa-banner-dismissed');
+        if (!dismissed || (Date.now() - parseInt(dismissed)) > 24 * 60 * 60 * 1000) {
+          banner.style.display = 'flex';
+        }
+
+        document.getElementById('pwa-install-close').addEventListener('click', function () {
+          banner.style.display = 'none';
+          localStorage.setItem('pwa-banner-dismissed', Date.now().toString());
+        });
+      }
+    })();
+  </script>
 </body>
 <style>
   html {
@@ -306,6 +346,55 @@
 
   body {
     margin-bottom: 60px;
+  }
+
+  /* PWAインストール促進バナー */
+  #pwa-install-banner {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .pwa-install-content {
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .pwa-install-text {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  .pwa-install-instruction {
+    color: #ccc;
+    font-size: 18px;
+    margin: 0 0 12px 0;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  .pwa-install-close {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 32px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   }
 </style>
 
