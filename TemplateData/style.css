@@ -9,6 +9,7 @@ body {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
+  background: #231F20;
 }
 
 #unity-container {
@@ -17,8 +18,7 @@ body {
   height: 100%;
   top: 0;
   left: 0;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  box-sizing: border-box;
+  background: #231F20;
 }
 
 #unity-canvas {
@@ -39,7 +39,7 @@ body {
 #unity-logo {
   width: 154px;
   height: 130px;
-  background: url('unity-logo-dark.png') no-repeat center;
+  background: url('icons/yaro-the-spire-icon.png') no-repeat center;
 }
 
 #unity-progress-bar-empty {
@@ -71,7 +71,7 @@ body {
 /* 縦画面時の警告メッセージ */
 @media screen and (orientation: portrait) {
   #unity-container::after {
-    content: "横画面にしてください / Please rotate to landscape";
+    content: "横画面にしてください！";
     position: fixed;
     top: 0;
     left: 0;
