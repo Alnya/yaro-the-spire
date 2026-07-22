@@ -100,9 +100,15 @@
       container.className = "unity-mobile";
     }
 
-    // 初回のcanvasサイズ設定（Unity起動前に適切なサイズを与える）
-    canvas.style.width = window.innerWidth + "px";
-    canvas.style.height = window.innerHeight + "px";
+    // canvas サイズをデバイスに合わせて設定（タッチ座標ズレ防止）
+    function resizeCanvas() {
+      canvas.width = window.innerWidth * window.devicePixelRatio;
+      canvas.height = window.innerHeight * window.devicePixelRatio;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
     loadingBar.style.display = "block";
 
