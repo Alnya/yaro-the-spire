@@ -222,14 +222,14 @@
           instruction.innerHTML = 'メニュー <span style="font-size:1.4em;">&#x22EE;</span> →「ホーム画面に追加」をタップ';
         }
 
-        var dismissed = localStorage.getItem('pwa-banner-dismissed');
+        var dismissed = sessionStorage.getItem('pwa-banner-dismissed');
         if (!dismissed || (Date.now() - parseInt(dismissed)) > 24 * 60 * 60 * 1000) {
           banner.style.display = 'flex';
         }
 
         document.getElementById('pwa-install-close').addEventListener('click', function () {
           banner.style.display = 'none';
-          localStorage.setItem('pwa-banner-dismissed', Date.now().toString());
+          sessionStorage.setItem('pwa-banner-dismissed', Date.now().toString());
         });
       }
     })();
