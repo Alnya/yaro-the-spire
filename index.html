@@ -257,14 +257,32 @@
         if (hit && !colliding) {
           colliding = true;
           // ロゴの中心とバーの中心の位置関係から反射方向を決定
+          var logoCenterX = logoX + logoW / 2;
           var logoCenterY = logoY + logoH / 2;
+          var barCenterX = barX + barW / 2;
           var barCenterY = barY + barH / 2;
-          if (logoCenterY < barCenterY) {
-            // 上から当たった場合
+
+          // 重なり量を計算して、最も浅い方向で反射
+          var overlapLeft = (logoX + logoW) - barX;
+          var overlapRight = (barX + barW) - logoX;
+          var overlapTop = (logoY + logoH) - barY;
+          var overlapBottom = (barY + barH) - logoY;
+          var minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+
+          if (minOverlap === overlapLeft) {
+            // 左側面に当たった
+            logoX = barX - logoW;
+            logoVx = -Math.abs(logoVx);
+          } else if (minOverlap === overlapRight) {
+            // 右側面に当たった
+            logoX = barX + barW;
+            logoVx = Math.abs(logoVx);
+          } else if (minOverlap === overlapTop) {
+            // 上から当たった
             logoY = barY - logoH;
             logoVy = -Math.abs(logoVy);
           } else {
-            // 下から当たった場合
+            // 下から当たった
             logoY = barY + barH;
             logoVy = Math.abs(logoVy);
           }
