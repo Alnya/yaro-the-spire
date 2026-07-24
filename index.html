@@ -150,6 +150,14 @@
       var barY = getAreaH() - 60;
 
       // --- ランダム色変更用 (hue-rotate filter) ---
+      var randomAngleRange = 25 * Math.PI / 180; // ±25°
+      function addRandomAngle() {
+        var speed = Math.sqrt(logoVx * logoVx + logoVy * logoVy);
+        var angle = Math.atan2(logoVy, logoVx);
+        angle += (Math.random() * 2 - 1) * randomAngleRange;
+        logoVx = Math.cos(angle) * speed;
+        logoVy = Math.sin(angle) * speed;
+      }
       function randomColor() {
         var hue = Math.floor(Math.random() * 360);
         logo.style.filter = "hue-rotate(" + hue + "deg) brightness(1.2)";
@@ -165,21 +173,25 @@
         if (logoX <= 0) {
           logoX = 0;
           logoVx = -logoVx;
+          addRandomAngle();
           randomColor();
         }
         if (logoX + logoW >= getAreaW()) {
           logoX = getAreaW() - logoW;
           logoVx = -logoVx;
+          addRandomAngle();
           randomColor();
         }
         if (logoY <= 0) {
           logoY = 0;
           logoVy = -logoVy;
+          addRandomAngle();
           randomColor();
         }
         if (logoY + logoH >= getAreaH()) {
           logoY = getAreaH() - logoH;
           logoVy = -logoVy;
+          addRandomAngle();
           randomColor();
         }
 
@@ -256,6 +268,7 @@
             logoY = barY + barH;
             logoVy = Math.abs(logoVy);
           }
+          addRandomAngle();
           randomColor();
         } else if (!hit) {
           colliding = false;
