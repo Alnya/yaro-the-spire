@@ -121,6 +121,181 @@
 
     loadingBar.style.display = "block";
 
+    // ===== ミニゲーム: ロゴバウンス & プログレスバースライド =====
+    (function () {
+      var logo = document.querySelector("#unity-logo");
+      var bar = document.querySelector("#unity-progress-bar-empty");
+      var loadBar = document.querySelector("#unity-loading-bar");
+
+      // --- ロゴの初期配置 ---
+      var logoW = 154, logoH = 130;
+      var barW = 141, barH = 18;
+      var logoX, logoY, logoVx, logoVy;
+      var logoHit = false; // 衝突フラグ
+      var logoGravityVy = 0;
+      var gravity = 0.5;
+      var bounceDamping = 0.7;
+      var logoSpeed = 3;
+
+      function getAreaW() { return window.innerWidth; }
+      function getAreaH() { return window.innerHeight; }
+
+      // ランダム初期位置（画面中央寄り）
+      logoX = (getAreaW() - logoW) / 2;
+      logoY = (getAreaH() - logoH) / 2;
+
+      // ランダム方向
+      var angle = Math.random() * Math.PI * 2;
+      logoVx = Math.cos(angle) * logoSpeed;
+      logoVy = Math.sin(angle) * logoSpeed;
+
+      // --- プログレスバーの初期配置（画面下部中央）---
+      var barX = (getAreaW() - barW) / 2;
+      var barY = getAreaH() - 60;
+
+      // --- ランダム色変更用 (hue-rotate filter) ---
+      function randomColor() {
+        var hue = Math.floor(Math.random() * 360);
+        logo.style.filter = "hue-rotate(" + hue + "deg) brightness(1.2)";
+      }
+
+      // --- ロゴのバウンスアニメーション ---
+      function updateLogo() {
+        if (logoHit) {
+          // 重力物理
+          logoGravityVy += gravity;
+          logoY += logoGravityVy;
+
+          // 画面底で跳ね返り（減衰あり）
+          if (logoY + logoH > getAreaH()) {
+            logoY = getAreaH() - logoH;
+            logoGravityVy = -logoGravityVy * bounceDamping;
+            if (Math.abs(logoGravityVy) < 1) {
+              logoGravityVy = 0;
+            }
+          }
+          // 横方向も少し動かす（衝突時の勢いを維持）
+          logoX += logoVx * 0.3;
+          if (logoX < 0) { logoX = 0; logoVx = -logoVx; }
+          if (logoX + logoW > getAreaW()) { logoX = getAreaW() - logoW; logoVx = -logoVx; }
+        } else {
+          // バウンス移動
+          logoX += logoVx;
+          logoY += logoVy;
+
+          // 画面端反射
+          if (logoX <= 0) {
+            logoX = 0;
+            logoVx = -logoVx;
+            randomColor();
+          }
+          if (logoX + logoW >= getAreaW()) {
+            logoX = getAreaW() - logoW;
+            logoVx = -logoVx;
+            randomColor();
+          }
+          if (logoY <= 0) {
+            logoY = 0;
+            logoVy = -logoVy;
+            randomColor();
+          }
+          if (logoY + logoH >= getAreaH()) {
+            logoY = getAreaH() - logoH;
+            logoVy = -logoVy;
+            randomColor();
+          }
+        }
+
+        logo.style.left = logoX + "px";
+        logo.style.top = logoY + "px";
+      }
+
+      // --- プログレスバーのスライド操作 ---
+      var dragging = false;
+      var dragOffsetX = 0;
+
+      function onDragStart(clientX) {
+        dragging = true;
+        dragOffsetX = clientX - barX;
+        bar.style.cursor = "grabbing";
+      }
+      function onDragMove(clientX) {
+        if (!dragging) return;
+        barX = clientX - dragOffsetX;
+        // 画面内に制限
+        if (barX < 0) barX = 0;
+        if (barX + barW > getAreaW()) barX = getAreaW() - barW;
+      }
+      function onDragEnd() {
+        dragging = false;
+        bar.style.cursor = "grab";
+      }
+
+      // マウスイベント
+      bar.addEventListener("mousedown", function (e) {
+        e.preventDefault();
+        onDragStart(e.clientX);
+      });
+      window.addEventListener("mousemove", function (e) {
+        onDragMove(e.clientX);
+      });
+      window.addEventListener("mouseup", function () {
+        onDragEnd();
+      });
+
+      // タッチイベント
+      bar.addEventListener("touchstart", function (e) {
+        e.preventDefault();
+        onDragStart(e.touches[0].clientX);
+      }, { passive: false });
+      window.addEventListener("touchmove", function (e) {
+        if (dragging) {
+          onDragMove(e.touches[0].clientX);
+        }
+      }, { passive: true });
+      window.addEventListener("touchend", function () {
+        onDragEnd();
+      });
+
+      // --- 衝突判定 ---
+      function checkCollision() {
+        if (logoHit) return;
+        // AABB衝突
+        var hit = logoX < barX + barW &&
+          logoX + logoW > barX &&
+          logoY < barY + barH &&
+          logoY + logoH > barY;
+        if (hit) {
+          logoHit = true;
+          logoGravityVy = logoVy; // 現在の速度を重力初速に
+          randomColor();
+        }
+      }
+
+      // --- メインループ ---
+      var animId;
+      function gameLoop() {
+        // ロード完了時にアニメーション停止
+        if (loadBar.style.display === "none") {
+          cancelAnimationFrame(animId);
+          return;
+        }
+        updateLogo();
+        bar.style.left = barX + "px";
+        bar.style.top = barY + "px";
+        checkCollision();
+        animId = requestAnimationFrame(gameLoop);
+      }
+      animId = requestAnimationFrame(gameLoop);
+
+      // リサイズ時にバーのY位置を再計算
+      window.addEventListener("resize", function () {
+        barY = getAreaH() - 60;
+        if (barX + barW > getAreaW()) barX = getAreaW() - barW;
+      });
+    })();
+    // ===== ミニゲーム ここまで =====
+
     var script = document.createElement("script");
     script.src = loaderUrl;
     script.onload = () => {
