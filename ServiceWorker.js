@@ -1,4 +1,4 @@
-const cacheName = "yaro-the-spire-0.0.9";
+const cacheName = "yaro-the-spire-0.1.0";
 const contentToCache = [
   "./",
   "./index.html",
